@@ -6,4 +6,6 @@ class Episode < ApplicationRecord
   validates :number, presence: true, 
                     numericality: { only_integer: true, greater_than: 0 }, 
                     uniqueness: { scope: :season_id }
+  
+  scope :by_ascending_number, -> { order(number: :asc) }
 end
