@@ -1,7 +1,10 @@
 class MovieSerializer < ActiveModel::Serializer
-  attributes :id, :title, :plot, :created_at, :updated_at, :purchase_options
+  attributes :id, :type, :title, :plot, :created_at, :updated_at, :purchase_options
 
-  
+  def type
+    object.class.name.downcase
+  end
+
   def purchase_options
  
     object.purchase_options.map do |purchase_option|
