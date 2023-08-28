@@ -1,5 +1,5 @@
 class PurchaseSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :email, :title , :purchase_option, :created_at, :updated_at
+  attributes :id, :user_id, :email, :title , :purchase_option, :expires_at, :created_at, :updated_at
   
   def email
     object.user.email
