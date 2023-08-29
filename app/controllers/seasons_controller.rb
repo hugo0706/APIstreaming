@@ -13,11 +13,13 @@ class SeasonsController < ApplicationController
   def create
     season = Season.new(season_params)
     season.save!
+    SeasonService.invalidate_cache
     render json: season, status: :created
   end
 
   def destroy
     Season.find(season_params.to_i).destroy
+    SeasonService.invalidate_cache
   end
 
   private

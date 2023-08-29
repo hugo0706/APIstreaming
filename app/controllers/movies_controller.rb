@@ -14,11 +14,13 @@ class MoviesController < ApplicationController
   def create
     movie = Movie.new(movie_params)
     movie.save!
+    MovieService.invalidate_cache
     render json: movie, status: :created
   end
 
   def destroy
     Movie.find(movie_params.to_i).destroy
+    MovieService.invalidate_cache
   end
 
   private

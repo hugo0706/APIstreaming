@@ -10,6 +10,11 @@ class SeasonService
     
   end
 
+  def self.invalidate_cache
+    Rails.cache.delete('seasons_desc_episodes_asc')
+    get_seasons_desc_episodes_asc
+  end
+
   def self.purchase_season(params)
     begin
       purchase_option = params[:purchase_option_id].to_i

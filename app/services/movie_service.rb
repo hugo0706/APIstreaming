@@ -8,6 +8,11 @@ class MovieService
 
   end
 
+  def self.invalidate_cache
+    Rails.cache.delete('movies_by_descending_creation')
+    get_movies_by_descending_creation
+  end
+
   def self.purchase_movie(params)
     begin
       purchase_option = params[:purchase_option_id].to_i
