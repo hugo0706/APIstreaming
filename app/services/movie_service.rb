@@ -10,13 +10,10 @@ class MovieService
 
   def self.purchase_movie(params)
     begin
-      
       purchase_option = params[:purchase_option_id].to_i
       movie = Movie.includes(:purchase_options).find(params[:purchasable_id].to_i)
       purchase_option = movie.purchase_options.find_by(id: purchase_option)
-      
       raise ActiveRecord::RecordNotFound if purchase_option.nil?
-      
       Purchase.transaction do
         Purchase.create!(**params, purchasable_type: "Movie", expires_at: Time.now + 2.days)
       end
@@ -27,10 +24,6 @@ class MovieService
       else
         raise ActiveRecord::RecordNotFound.new("Movie not found")
       end
-    rescue ActiveRecord::RecordInvalid => e
-      raise e
-    rescue StandardError => e
-      raise e
     end
   end
 end
