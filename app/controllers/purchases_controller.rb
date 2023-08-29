@@ -13,7 +13,8 @@ class PurchasesController < ApplicationController
       purchase = MovieService.purchase_movie valid_params
       render json: purchase, status: :created   
     when "Season"
-      SeasonService.purchase_season valid_params
+      purchase = SeasonService.purchase_season valid_params
+      render json: purchase, status: :created   
     else
       raise ActionController::ParameterMissing.new("purchasable_type value not valid")
     end
