@@ -7,5 +7,7 @@ Rails.application.routes.draw do
   resources :catalog, only: [:index]
 
   post '/purchase', to: 'purchases#purchase', as: 'purchase'
+
+  get '/profile/library', to: 'users#library', as: 'library'
   
 end
