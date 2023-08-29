@@ -1,14 +1,15 @@
 class PurchasesController < ApplicationController
+  before_action :validate_params, only: [:purchase]
+
+  rescue_from ActionController::ParameterMissing, with: :handle_bad_request
 
   def purchase
-    params = purchase_params
+
     case params.delete(:purchasable_type).capitalize
     when "Movie"
       begin
-        
         purchase = MovieService.purchase_movie params
         render json: purchase, status: :created
-      
       rescue ActiveRecord::RecordNotFound => e
         render json: { error: e.message }, status: :not_found
       rescue ActiveRecord::RecordInvalid => e
@@ -27,11 +28,17 @@ class PurchasesController < ApplicationController
 
   private
 
-  def purchase_params
-    begin
-      params.require(:purchase).permit(:purchasable_type, :purchasable_id, :user_id, :purchase_option_id)
-    rescue ActionController::ParameterMissing => e
-      render json: { error: e.message }, status: :bad_request
+  def validate_params
+    params.require(:purchase)
+    %i[purchasable_type purchasable_id user_id purchase_option_id].each do |key|
+      raise ActionController::ParameterMissing.new(key) unless params[:purchase].key?(key)
     end
+    params.permit(:purchasable_type, :purchasable_id, :user_id, :purchase_option_id)
   end
+
+  def handle_bad_request(exception)
+    render json: { error: exception.message }, status: :bad_request
+  end
+  
+
 end
