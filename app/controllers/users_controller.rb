@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  
+  include ErrorHandler
+
   def library
     library = UserService.get_library(params[:user_id].to_i)
     if library.present?

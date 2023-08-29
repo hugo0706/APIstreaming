@@ -10,4 +10,6 @@ Rails.application.routes.draw do
 
   get '/profile/library', to: 'users#library', as: 'library'
   
+  match '*unmatched', to: 'application#handle_routing_error', via: :all
+
 end
