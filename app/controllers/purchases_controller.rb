@@ -2,6 +2,7 @@ class PurchasesController < ApplicationController
   include ErrorHandler
 
   before_action :validate_params, only: [:purchase]
+  before_action :update_library, only: [:purchase]
 
   def purchase
     valid_params = params[:purchase]
@@ -25,6 +26,11 @@ class PurchasesController < ApplicationController
       raise ActionController::ParameterMissing.new(key) unless params[:purchase].key?(key)
     end
     params[:purchase] = params.require(:purchase).permit(:purchasable_type, :purchasable_id, :user_id, :purchase_option_id)
+  end
+
+  def update_library
+    user = User.find(params[:purchase][:user_id].to_i)
+    UserService.update_library(user)
   end
 
 end
