@@ -16,6 +16,7 @@ class SeasonService
       season = Season.includes(:purchase_options,:episodes).find(params[:purchasable_id].to_i)
       purchase_option = season.purchase_options.find_by(id: purchase_option)
       raise ActiveRecord::RecordNotFound if purchase_option.nil?
+      
       Purchase.transaction do
         Purchase.create!(**params, purchasable_type: "Season", expires_at: Time.now + 2.days)
       end
