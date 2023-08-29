@@ -10,4 +10,23 @@ class SeasonsController < ApplicationController
       end
   end
 
+  def create
+    season = Season.new(season_params)
+    season.save!
+    render json: season, status: :created
+  end
+
+  def destroy
+    Season.find(season_params.to_i).destroy
+  end
+
+  private
+
+  def season_params
+    if action_name == 'create'
+      params.require(:season).permit(:title, :plot,:number, :purchase_options_attributes => [:price, :quality], :episodes_attributes => [:title, :plot, :number])
+    elsif action_name == 'destroy'
+      params.require(:id)
+    end
+  end
 end
