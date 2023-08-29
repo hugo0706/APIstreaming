@@ -6,6 +6,8 @@ module ErrorHandler
     rescue_from ActionController::ParameterMissing, with: :handle_bad_request
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
     rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity
+    rescue_from ActiveRecord::RecordNotDestroyed, with: :handle_unprocessable_entity
+    rescue_from ActiveRecord::RecordNotSaved, with: :handle_unprocessable_entity
     rescue_from ActionController::RoutingError, with: :handle_not_found
   end
 
