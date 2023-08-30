@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.describe "Seasons", type: :request do
   describe "GET /index" do
+    
+    let(:expected_keys) do 
+      ['id', 'type', 'title', 'plot', 'number', 'created_at', 'updated_at', 'episodes', 'purchase_options']
+    end
+
     context 'when seasons exist' do
       let!(:season1) { FactoryBot.create(:season,:with_episodes,:with_purchase_options,purchase_options_count: 2) }
       let!(:season2) { FactoryBot.create(:season,:with_episodes,:with_purchase_options,episodes_count: 2) }
@@ -16,7 +21,7 @@ RSpec.describe "Seasons", type: :request do
         expect(json_response.length).to eq(2)
         json_response.each do |item|
           keys = item.keys
-          expect(keys).to contain_exactly('id', 'type', 'title', 'plot','number', 'created_at', 'updated_at','episodes', 'purchase_options')
+          expect(keys).to contain_exactly(*expected_keys)
         end
         expect(json_response[0]["purchase_options"].length).to eq(2)
         expect(json_response[0]["episodes"].length).to eq(1)
@@ -63,6 +68,11 @@ RSpec.describe "Seasons", type: :request do
 
 
   describe "POST /create" do
+    
+    let(:expected_keys) do 
+      ['id', 'type', 'title', 'plot', 'number', 'created_at', 'updated_at', 'episodes', 'purchase_options']
+    end
+
     context 'when params are correct' do
   
       let(:params) {
@@ -123,7 +133,7 @@ RSpec.describe "Seasons", type: :request do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:created)
         keys = json_response.map { |key, _value| key }
-        expect(keys).to contain_exactly('id','type', 'title', 'plot','number', 'created_at', 'updated_at', 'episodes','purchase_options')
+        expect(keys).to contain_exactly(*expected_keys)
         expect(json_response["purchase_options"].length).to eq(2)
         expect(json_response["episodes"].length).to eq(2)
       end
