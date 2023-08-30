@@ -32,12 +32,12 @@ RSpec.describe "Seasons", type: :request do
     end
 
     context 'when seasons dont exist' do
-      it 'returns error "No seasons found" with status :not_found' do
+      it 'returns error "No seasons found" with status :ok' do
         allow(SeasonService).to receive(:get_seasons_desc_episodes_asc).and_return([])
 
         get '/seasons'
         json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:ok)
         expect(json_response).to include('error')
         expect(json_response["error"]).to eq("No seasons found")
       end

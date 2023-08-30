@@ -31,13 +31,13 @@ RSpec.describe "Movies", type: :request do
     end
 
     context 'when movies dont exist' do
-      it 'returns error "No movies found" with status :not_found' do
+      it 'returns error "No movies found" with status :ok' do
         allow(MovieService).to receive(:get_movies_by_descending_creation).and_return([])
 
         get '/movies'
 
         json_response = JSON.parse(response.body)
-        expect(response).to have_http_status(:not_found)
+        expect(response).to have_http_status(:ok)
         expect(json_response).to include('error')
         expect(json_response["error"]).to eq("No movies found")
       end

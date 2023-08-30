@@ -6,7 +6,7 @@ class SeasonsController < ApplicationController
       if seasons.present?
         render json: seasons, status: :ok
       else
-        render json: { error: "No seasons found" }, status: :not_found
+        render json: { error: "No seasons found" }, status: :ok
       end
   end
 
