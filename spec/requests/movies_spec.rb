@@ -10,13 +10,17 @@ RSpec.describe "Movies", type: :request do
         allow(MovieService).to receive(:get_movies_by_descending_creation).and_return([movie1,movie2])
 
         get '/movies'
+        
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)).to be_an(Array)
-        expect(JSON.parse(response.body).length).to eq(2)
-        expect(JSON.parse(response.body)[0]).to include('id', 'title', 'plot', 'created_at', 'updated_at', 'purchase_options')
-        expect(JSON.parse(response.body)[0]["purchase_options"].length).to eq(2)
-        expect(JSON.parse(response.body)[1]).to include('id', 'title', 'plot', 'created_at', 'updated_at', 'purchase_options')
-        expect(JSON.parse(response.body)[1]["purchase_options"].length).to eq(1)
+        expect(json_response).to be_an(Array)
+        expect(json_response.length).to eq(2)
+        json_response.each do |item|
+          keys = item.keys
+          expect(keys).to contain_exactly('id','type', 'title', 'plot', 'created_at', 'updated_at', 'purchase_options')
+        end
+        expect(json_response[0]["purchase_options"].length).to eq(2)
+        expect(json_response[1]["purchase_options"].length).to eq(1)
 
       end
     end
@@ -27,9 +31,10 @@ RSpec.describe "Movies", type: :request do
 
         get '/movies'
 
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)).to include('error')
-        expect(JSON.parse(response.body)["error"]).to eq("No movies found")
+        expect(json_response).to include('error')
+        expect(json_response["error"]).to eq("No movies found")
       end
     end
 
@@ -39,8 +44,9 @@ RSpec.describe "Movies", type: :request do
 
         get '/movies'
 
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)).to include('error')
+        expect(json_response).to include('error')
       end
     end
     
@@ -93,10 +99,14 @@ RSpec.describe "Movies", type: :request do
       end
   
       it 'returns created status and the new movie as JSON' do
+        
         post '/movies', params: params
+        
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)).to include('id', 'title', 'plot', 'created_at', 'updated_at', 'purchase_options')
-        expect(JSON.parse(response.body)["purchase_options"].length).to eq(1)
+        keys = json_response.map { |key, _value| key }
+        expect(keys).to contain_exactly('id','type', 'title', 'plot', 'created_at', 'updated_at', 'purchase_options')
+        expect(json_response["purchase_options"].length).to eq(1)
       end
     end
 
@@ -121,9 +131,12 @@ RSpec.describe "Movies", type: :request do
       end
 
       it 'returns unprocessable_entity status and error message' do
+        
         post '/movies', params: invalid_params
+        
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error')
+        expect(json_response).to include('error')
       end
     end
   end

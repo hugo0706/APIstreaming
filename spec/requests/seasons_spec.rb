@@ -10,15 +10,18 @@ RSpec.describe "Seasons", type: :request do
         allow(SeasonService).to receive(:get_seasons_desc_episodes_asc).and_return([season1,season2])
 
         get '/seasons'
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)).to be_an(Array)
-        expect(JSON.parse(response.body).length).to eq(2)
-        expect(JSON.parse(response.body)[0]).to include('id', 'title', 'plot','number', 'created_at', 'updated_at','episodes', 'purchase_options')
-        expect(JSON.parse(response.body)[0]["purchase_options"].length).to eq(2)
-        expect(JSON.parse(response.body)[0]["episodes"].length).to eq(1)
-        expect(JSON.parse(response.body)[1]).to include('id', 'title', 'plot','number', 'created_at', 'updated_at','episodes', 'purchase_options')
-        expect(JSON.parse(response.body)[1]["purchase_options"].length).to eq(1)
-        expect(JSON.parse(response.body)[1]["episodes"].length).to eq(2)
+        expect(json_response).to be_an(Array)
+        expect(json_response.length).to eq(2)
+        json_response.each do |item|
+          keys = item.keys
+          expect(keys).to contain_exactly('id', 'type', 'title', 'plot','number', 'created_at', 'updated_at','episodes', 'purchase_options')
+        end
+        expect(json_response[0]["purchase_options"].length).to eq(2)
+        expect(json_response[0]["episodes"].length).to eq(1)
+        expect(json_response[1]["purchase_options"].length).to eq(1)
+        expect(json_response[1]["episodes"].length).to eq(2)
 
       end
     end
@@ -28,10 +31,10 @@ RSpec.describe "Seasons", type: :request do
         allow(SeasonService).to receive(:get_seasons_desc_episodes_asc).and_return([])
 
         get '/seasons'
-
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)).to include('error')
-        expect(JSON.parse(response.body)["error"]).to eq("No seasons found")
+        expect(json_response).to include('error')
+        expect(json_response["error"]).to eq("No seasons found")
       end
     end
 
@@ -41,8 +44,9 @@ RSpec.describe "Seasons", type: :request do
 
         get '/seasons'
 
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
-        expect(JSON.parse(response.body)).to include('error')
+        expect(json_response).to include('error')
       end
     end
     
@@ -113,11 +117,15 @@ RSpec.describe "Seasons", type: :request do
       end
   
       it 'returns created status and the new season as JSON' do
+       
         post '/seasons', params: params
+
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)).to include('id', 'title', 'plot','number', 'created_at', 'updated_at', 'episodes','purchase_options')
-        expect(JSON.parse(response.body)["purchase_options"].length).to eq(2)
-        expect(JSON.parse(response.body)["episodes"].length).to eq(2)
+        keys = json_response.map { |key, _value| key }
+        expect(keys).to contain_exactly('id','type', 'title', 'plot','number', 'created_at', 'updated_at', 'episodes','purchase_options')
+        expect(json_response["purchase_options"].length).to eq(2)
+        expect(json_response["episodes"].length).to eq(2)
       end
     end
 
@@ -152,9 +160,12 @@ RSpec.describe "Seasons", type: :request do
       end
 
       it 'returns unprocessable_entity status and error message' do
+        
         post '/seasons', params: invalid_params
+
+        json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body)).to include('error')
+        expect(json_response).to include('error')
       end
     end
   end
