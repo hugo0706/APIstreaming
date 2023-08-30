@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :episode do
-    title { "MyString" }
-    plot { "MyText" }
-    number { 1 }
-    season { nil }
+    sequence(:title) { |n| "EP #{n}" }
+    sequence(:plot)  { |n| "EP #{n}" }
+    sequence(:number) { |n| n }
+    association :season
   end
 end
