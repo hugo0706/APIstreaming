@@ -15,8 +15,19 @@
   - [Invalidation](#invalidation)
 - [Tests](#tests)
 - [Endpoints](#endpoints)
-  - [GET /movies](#get-movies)
-  - [POST /movies](#post-movies)
+  - [Movies](#movies)
+    - [GET /movies](#get-movies)
+    - [POST /movies](#post-movies)
+    - [DELETE /movies](#delete-movies)
+  - [Seasons](#seasons)
+    - [GET /seasons](#get-seasons)
+    - [POST /seasons](#post-seasons)
+    - [DELETE /seasons](#delete-seasons)
+  - [Catalog](#catalog)
+    - [GET /catalog](#get-catalog)
+  - [Purchase](#purchase)
+    - [POST /purchase](#post-purchase)
+
 
 ## Introduction
 
