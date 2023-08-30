@@ -46,8 +46,7 @@ RSpec.describe "Catalog", type: :request do
         get '/catalog'
 
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('No catalog found')
-        expect(response.body).to include('error')
+        expect(response.body).to eq("[]")
         
       end
     end

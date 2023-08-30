@@ -6,7 +6,7 @@ class MoviesController < ApplicationController
     if movies.present?
       render json: movies, status: :ok
     else
-      render json: { error: "No movies found" }, status: :ok
+      render json: [], status: :ok
     end
    
   end

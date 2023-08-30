@@ -6,7 +6,7 @@ class CatalogController < ApplicationController
     if catalog.present?
       render json: catalog, status: :ok
     else
-      render json: { error: 'No catalog found' }, status: :ok
+      render json: [], status: :ok
     end
 
   end

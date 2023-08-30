@@ -38,8 +38,7 @@ RSpec.describe "Movies", type: :request do
 
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
-        expect(json_response).to include('error')
-        expect(json_response["error"]).to eq("No movies found")
+        expect(json_response).to eq([])
       end
     end
 
