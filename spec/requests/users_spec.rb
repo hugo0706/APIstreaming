@@ -28,5 +28,22 @@ RSpec.describe "Users", type: :request do
       end
 
     end
+    context 'when user checks purchases older than 2 days' do
+      it 'purchasables dissapear with status :ok' do
+        
+        get '/profile/library?user_id='+user.id.to_s
+
+        expect(response).to have_http_status(:ok)
+        response_json = JSON.parse(response.body)
+        expect(response_json.length).to eq(3)
+        Timecop.travel(Time.now + 2.days) do
+          get '/profile/library?user_id='+user.id.to_s
+          expect(response).to have_http_status(:ok)
+          response_json = JSON.parse(response.body)
+          expect(response_json.length).to eq(0)
+        end
+      end
+
+    end
   end
 end
