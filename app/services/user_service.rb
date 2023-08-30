@@ -14,7 +14,7 @@ class UserService
 
     library = purchases.map do |purchase|
       {
-        content: purchase.purchasable,
+        purchasable: purchase.purchasable,
         purchase_option: purchase.purchase_option,
         expires_at: purchase.expires_at
       }
