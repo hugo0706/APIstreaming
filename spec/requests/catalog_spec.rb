@@ -35,11 +35,22 @@ RSpec.describe "Catalog", type: :request do
           else
             expect(item).not_to include("episodes")
           end
-
         end
-   
-
       end
     end
+
+    context 'when movies and seasons dont exist' do
+      it 'returns error "No catalog found" with status :ok' do
+        allow(CatalogService).to receive(:get_catalog_ordered).and_return([])
+        
+        get '/catalog'
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include('No catalog found')
+        expect(response.body).to include('error')
+        
+      end
+    end
+
   end
 end
