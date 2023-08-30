@@ -3,7 +3,7 @@ module ErrorHandler
 
   included do
     rescue_from StandardError, with: :handle_internal_error
-    rescue_from ActionController::ParameterMissing, with: :handle_bad_request
+    rescue_from ActionController::ParameterMissing, with: :handle_unprocessable_entity
     rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
     rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity
     rescue_from ActiveRecord::RecordNotDestroyed, with: :handle_unprocessable_entity
