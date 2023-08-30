@@ -1,9 +1,28 @@
 # APIstreaming
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Assumptions](#assumptions)
+- [Versions](#versions)
+- [How to Deploy](#how-to-deploy)
+  - [Local Development](#local-development)
+- [Project Structure](#project-structure)
+  - [Schema](#schema)
+  - [Relationships](#relationships)
+  - [Polymorphism](#polymorphism)
+  - [Folder Structure](#folder-structure)
+- [Caching Strategy](#caching-strategy)
+  - [Invalidation](#invalidation)
+- [Tests](#tests)
+- [Endpoints](#endpoints)
+  - [GET /movies](#get-movies)
+  - [POST /movies](#post-movies)
 
 ## Introduction
 
 This project simulates a RESTful API for a streaming service. The API handles various requests, including listing available movies, seasons, and the entire catalog offered by the service. It also manages user libraries and handles purchase requests.
 
+  
 ## Asumptions
 
 - 10 movie/seasons added every week
@@ -272,3 +291,363 @@ Response `201 Created`:
     ]
 }
 ```
+
+### DELETE /movies
+
+Description:
+Deletes a movie record
+Request:
+```bash
+curl -X DELETE localhost:3000/movies/{movie_id}
+```
+Response:
+``204 No content``
+
+### GET /seasons
+
+Description:
+Returns the season list ordered by newest with their respective episodes ordered by number
+
+Request:
+```bash 
+curl -X GET localhost:3000/seasons
+```
+Response: ``200 ok``
+
+```json
+[
+    {
+        "id": 6,
+        "type": "season",
+        "title": "season",
+        "number": 1,
+        "plot": "as",
+        "created_at": "2023-08-30T10:51:14.622Z",
+        "updated_at": "2023-08-30T10:51:14.622Z",
+        "episodes": [
+            {
+                "type": "episode",
+                "id": 9,
+                "title": "EP1",
+                "number": 1,
+                "plot": "PLOT",
+                "created_at": "2023-08-30T10:51:14.632Z"
+            },
+            {
+                "type": "episode",
+                "id": 10,
+                "title": "EP2",
+                "number": 2,
+                "plot": "PLOT",
+                "created_at": "2023-08-30T10:51:14.640Z"
+            }
+        ],
+        "purchase_options": [
+            {
+                "id": 19,
+                "optionable_type": "Season",
+                "optionable_id": 6,
+                "price": "3.99",
+                "quality": "SD",
+                "created_at": "2023-08-30T10:51:14.631Z",
+                "updated_at": "2023-08-30T10:51:14.631Z"
+            },
+            {
+                "id": 18,
+                "optionable_type": "Season",
+                "optionable_id": 6,
+                "price": "2.99",
+                "quality": "HD",
+                "created_at": "2023-08-30T10:51:14.627Z",
+                "updated_at": "2023-08-30T10:51:14.627Z"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "type": "season",
+        "title": "Season 1",
+        "number": 1,
+        "plot": "Season 1",
+        "created_at": "2023-08-30T08:51:12.967Z",
+        "updated_at": "2023-08-30T08:51:12.967Z",
+        "episodes": [
+            {
+                "type": "episode",
+                "id": 7,
+                "title": "EP 1",
+                "number": 1,
+                "plot": "EP 1",
+                "created_at": "2023-08-30T08:51:13.157Z"
+            }
+        ],
+        "purchase_options": [
+            {
+                "id": 12,
+                "optionable_type": "Season",
+                "optionable_id": 4,
+                "price": "9.99",
+                "quality": "SD",
+                "created_at": "2023-08-30T08:51:13.198Z",
+                "updated_at": "2023-08-30T08:51:13.198Z"
+            }
+        ]
+    }
+    
+]
+```
+
+### POST /seasons
+
+Description:
+Request:
+```bash
+curl -X POST localhost:3000/seasons -
+```
+Params:
+```json
+{
+  "season": {
+    "title": "season",
+    "plot": "plot",
+    "number": 1,
+    "purchase_options_attributes": [
+        {
+        "price": 2.99,
+        "quality": "HD"
+        },
+        {
+        "price": 3.99,
+        "quality": "SD"
+        }
+    ],
+    "episodes_attributes": [
+        {
+        "title": "EP1",
+        "plot": "PLOT",
+        "number": 1
+        },
+        {
+        "title": "EP2",
+        "plot": "PLOT",
+        "number": 2
+        }
+    ]
+  }
+}
+``````
+Response: `201 created`
+```json
+{
+    "id": 7,
+    "type": "season",
+    "title": "season",
+    "number": 1,
+    "plot": "plot",
+    "created_at": "2023-08-30T20:22:39.698Z",
+    "updated_at": "2023-08-30T20:22:39.698Z",
+    "episodes": [
+        {
+            "type": "episode",
+            "id": 11,
+            "title": "EP1",
+            "number": 1,
+            "plot": "PLOT",
+            "created_at": "2023-08-30T20:22:39.705Z"
+        },
+        {
+            "type": "episode",
+            "id": 12,
+            "title": "EP2",
+            "number": 2,
+            "plot": "PLOT",
+            "created_at": "2023-08-30T20:22:39.710Z"
+        }
+    ],
+    "purchase_options": [
+        {
+            "id": 21,
+            "optionable_type": "Season",
+            "optionable_id": 7,
+            "price": "2.99",
+            "quality": "HD",
+            "created_at": "2023-08-30T20:22:39.703Z",
+            "updated_at": "2023-08-30T20:22:39.703Z"
+        },
+        {
+            "id": 22,
+            "optionable_type": "Season",
+            "optionable_id": 7,
+            "price": "3.99",
+            "quality": "SD",
+            "created_at": "2023-08-30T20:22:39.704Z",
+            "updated_at": "2023-08-30T20:22:39.704Z"
+        }
+    ]
+}
+```
+
+### DELETE /seasons
+
+Description:
+Destroys a season record
+```bash
+curl -X DELETE localhost:3000/season/{season_id}
+```
+Response:
+``204 No content``
+
+### GET /catalog
+
+Description:
+Returns a list of movies and seasons, ordered by creation
+Request:
+```bash
+curl -X GET localhost:3000/catalog
+```
+Response: `200 ok``
+```json
+[
+    {
+        "id": 7,
+        "type": "movie",
+        "title": "movie",
+        "plot": "as",
+        "created_at": "2023-08-30T18:33:22.795Z",
+        "updated_at": "2023-08-30T18:33:22.795Z",
+        "purchase_options": [
+            {
+                "id": 20,
+                "price": "2.99",
+                "quality": "HD"
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "type": "movie",
+        "title": "Movie 2",
+        "plot": "Movie 2",
+        "created_at": "2023-08-30T08:52:59.267Z",
+        "updated_at": "2023-08-30T08:52:59.267Z",
+        "purchase_options": [
+            {
+                "id": 15,
+                "price": "9.99",
+                "quality": "SD"
+            },
+            {
+                "id": 16,
+                "price": "9.99",
+                "quality": "SD"
+            },
+            {
+                "id": 17,
+                "price": "9.99",
+                "quality": "SD"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "type": "season",
+        "title": "Season 2",
+        "number": 2,
+        "plot": "Season 2",
+        "created_at": "2023-08-30T08:51:24.193Z",
+        "updated_at": "2023-08-30T08:51:24.193Z",
+        "episodes": [
+            {
+                "type": "episode",
+                "id": 8,
+                "title": "EP 2",
+                "number": 2,
+                "plot": "EP 2",
+                "created_at": "2023-08-30T08:51:24.197Z"
+            }
+        ],
+        "purchase_options": [
+            {
+                "id": 13,
+                "optionable_type": "Season",
+                "optionable_id": 5,
+                "price": "9.99",
+                "quality": "SD",
+                "created_at": "2023-08-30T08:51:24.199Z",
+                "updated_at": "2023-08-30T08:51:24.199Z"
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "type": "season",
+        "title": "Season 1",
+        "number": 1,
+        "plot": "Season 1",
+        "created_at": "2023-08-30T08:51:12.967Z",
+        "updated_at": "2023-08-30T08:51:12.967Z",
+        "episodes": [
+            {
+                "type": "episode",
+                "id": 7,
+                "title": "EP 1",
+                "number": 1,
+                "plot": "EP 1",
+                "created_at": "2023-08-30T08:51:13.157Z"
+            }
+        ],
+        "purchase_options": [
+            {
+                "id": 12,
+                "optionable_type": "Season",
+                "optionable_id": 4,
+                "price": "9.99",
+                "quality": "SD",
+                "created_at": "2023-08-30T08:51:13.198Z",
+                "updated_at": "2023-08-30T08:51:13.198Z"
+            }
+        ]
+    }
+]
+```
+
+### POST /purchase
+Description:
+Creates a purchase record, returns the purchase data.
+Request:
+```bash
+curl -X POST localhost:3000/purchase -d 'params'
+```
+Params:
+```json
+{
+  "purchase": {
+    "purchasable_type": "Season", #can  also be Movie
+    "purchasable_id": 3,
+    "user_id": 1,
+    "purchase_option_id": 11
+  }
+}
+```
+
+Response: `201 created`
+```json 
+{
+    "id": 20,
+    "user_id": 1,
+    "email": "email",
+    "title": "Season 2",
+    "purchase_option": {
+        "id": 13,
+        "price": "9.99",
+        "quality": "SD"
+    },
+    "purchasable_type": "Season",
+    "purchasable_id": 5,
+    "expires_at": "2023-09-01T20:37:54.379Z",
+    "created_at": "2023-08-30T20:37:54.381Z",
+    "updated_at": "2023-08-30T20:37:54.381Z"
+}
+```
+
+
