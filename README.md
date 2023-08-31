@@ -27,7 +27,7 @@
     - [GET /catalog](#get-catalog)
   - [Purchase](#purchase)
     - [POST /purchase](#post-purchase)
-  - [Library]
+  - [Library](#library)
     - [GET /profile/library](#get-profilelibrary)
 
 
@@ -89,8 +89,8 @@ This project simulates a RESTful API for a streaming service. The API handles va
 4. **Database Setup**
 
     ```bash
-    rake db:create
-    rake db:migrate
+    rails db:create
+    rails db:migrate
     ```
 5. **Populate Database (optional)**
    ```bash
@@ -203,6 +203,144 @@ rspec
 To see coverage results after desploying tests use
 ```bash
 open coverage/index.html
+```
+Coverage given by SimpleCov:
+99.21% covered at 2.45 hits/line
+
+### Rspec tests
+
+## API Documentation
+
+```markdown
+### Controllers
+#### Catalog
+  GET /index
+    when movies and seasons exist
+      returns a list of movies and seasons with status :ok
+    when movies and seasons dont exist
+      returns error "No catalog found" with status :ok
+
+#### Movies
+  GET /index
+    when movies exist
+      returns a list of movies with status :ok
+    when movies dont exist
+      returns error "No movies found" with status :ok
+    when ActiveRecord::RecordNotFound is raised
+      returns error message with status :not_found
+    when StandardError is raised
+      returns error message with status :internal_server_error
+  POST /create
+    when params are correct
+      creates a new Movie
+      invalidates the cache
+      returns created status and the new movie as JSON
+    when params lack movie key
+      does not create a new Movie
+      returns unprocessable_entity status and error message
+    when other param is incorrect
+      doesnt create a new Movie
+      returns e
+  DELETE /destroy
+    when movie exists
+      deletes the movie
+      deletes the movie purchases
+      deletes the movie purchase_options
+
+#### Purchases
+  POST /purchase
+    when purchase is a movie
+      creates a purchase
+      returns a purchased movie and status :created
+    when purchase is a season
+      creates a purchase
+      returns a purchased season and status :created
+    when params are empty
+      returns error status 422
+    when movie doesnt exist
+      returns error status not found
+    when season doesnt exist
+      returns error status not fount
+    when purchase option doesnt exist
+      returns error status not found
+    when user doesnt exist
+      returns error status not fount
+    when trying to purchase a movie twice
+      returns error Purchase option has already been taken status 422
+    when trying to purchase a movie twice with 2 days in between
+      returns a purchased movie and status :created
+
+#### Seasons
+  GET /index
+    when seasons exist
+      returns a list of seasons with status :ok
+    when seasons dont exist
+      returns error "No seasons found" with status :ok
+    when ActiveRecord::RecordNotFound is raised
+      returns error message with status :not_found
+    when StandardError is raised
+      returns error message with status :internal_server_error
+  POST /create
+    when params are correct
+      creates a new Season
+      invalidates the cache
+      returns created status and the new season as JSON
+    when params are incorrect
+      does not create a new Season
+      returns unprocessable_entity status and error message
+  DELETE /destroy
+    when season exists
+      deletes the season
+      deletes the season purchases
+      deletes the season purchase_options
+
+#### Users
+  GET /profile/library
+    when user has purchases
+      returns a list of seasons/movies with status :ok
+    when user has no purchases
+      returns empty array with status :ok
+    when user checks purchases older than 2 days
+      purchasables dissapear with status :ok
+### Services
+#### CatalogService
+  .get_catalog
+    returns a list of available movies and seasons
+  .get_catalog_ordered
+    returns a combined and ordered list of movies and seasons by creation date
+
+#### MovieService
+  .get_movies_by_descending_creation
+    when movies exist
+      returns a list of available movies
+      fetches the list of movies from the cache
+    when movies dont exist
+      returns an empty list
+  .purchase_movie
+    when successful
+      creates a new purchase
+    when movie is not found
+      raises a RecordNotFound error
+    when purchase option is not found
+      raises a RecordNotFound error
+
+#### SeasonService
+  .get_seasons_desc_episodes_asc
+    when seasons exist
+      returns a list of available seasons
+      fetches the list of season from the cache
+    when seasons dont exist
+      returns an empty list
+  .invalidate_cache
+    invalidates the cache
+  .purchase_season
+    when successful
+      creates a new purchase
+    when season is not found
+      raises a RecordNotFound error
+    when purchase option is not found
+      raises a RecordNotFound error
+
 ```
 
 ---
