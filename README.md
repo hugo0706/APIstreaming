@@ -209,8 +209,6 @@ Coverage given by SimpleCov:
 
 ### Rspec tests
 
-## API Documentation
-
 ```markdown
 ### Controllers
 #### Catalog
