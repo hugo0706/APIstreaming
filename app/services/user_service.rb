@@ -13,12 +13,7 @@ class UserService
     purchases = user.purchases.includes(:purchasable, :purchase_option).order(expires_at: :asc)
     
     library = purchases.map do |purchase|
-      serializer = case purchase.purchasable.class.to_s
-      when 'Movie'
-        MovieSerializer
-      when 'Season'
-        SeasonSerializer
-      end
+      serializer = serializer_for(purchase.purchasable)
       {
         purchasable: serializer.new(purchase.purchasable).as_json,
         purchased_option: purchase.purchase_option,
@@ -26,6 +21,17 @@ class UserService
       }
     end.compact
     
+  end
+
+  private
+
+  def self.serializer_for(purchasable)
+    case purchasable.class.to_s
+    when 'Movie'
+      MovieSerializer
+    when 'Season'
+      SeasonSerializer
+    end
   end
 
 end
