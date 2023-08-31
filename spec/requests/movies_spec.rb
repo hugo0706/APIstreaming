@@ -119,7 +119,7 @@ RSpec.describe "Movies", type: :request do
       end
     end
 
-    context 'when params are incorrect' do
+    context 'when params lack movie key' do
       let(:invalid_params) {
         {
           "title": "movie",
@@ -146,6 +146,87 @@ RSpec.describe "Movies", type: :request do
         json_response = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(json_response).to include('error')
+      end
+    end
+  
+    context 'when other param is incorrect' do
+  
+      let(:params1) {
+        {
+          "movie": {
+            "title": "movie",
+            "plot": "plot",
+            "purchase_options_attributes": [
+                {
+                "price": "a",
+                "quality": "HD"
+                }
+            ]
+          }
+        }
+      }
+      let(:params2) {
+        {
+          "movie": {
+            "title": "movie",
+            "plot": "plot",
+            "purchase_options_attributes": [
+                {
+                "price": 2.99,
+                "quality": "HHHHD"
+                }
+            ]
+          }
+        }
+      }
+  
+      it 'doesnt create a new Movie' do
+        expect {
+          post '/movies', params: params1
+        }.to change(Movie, :count).by(0)
+        expect {
+          post '/movies', params: params2
+        }.to change(Movie, :count).by(0)
+      end
+
+      it 'returns e' do
+        post '/movies', params: params1
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
+        post '/movies', params: params2
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
+      end
+    end
+  end
+
+  describe "DELETE /destroy" do
+    let(:movie) { FactoryBot.create(:movie,:with_purchase_options,purchase_options_count: 3) }
+    let(:purchase) { FactoryBot.create(:purchase, purchasable: movie, purchase_option: movie.purchase_options.first)}
+    context 'when movie exists' do
+      
+      it 'deletes the movie' do
+        delete '/movies/'+movie.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(Movie.count).to eq(0)
+      end
+
+      it 'deletes the movie purchases' do
+        purchase
+        expect(Purchase.count).to eq(1)
+        delete '/movies/'+movie.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(Purchase.count).to eq(0)
+      end
+
+      it 'deletes the movie purchase_options' do
+        movie
+        expect(PurchaseOption.count).to eq(3)
+        delete '/movies/'+movie.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(PurchaseOption.count).to eq(0)
       end
     end
   end

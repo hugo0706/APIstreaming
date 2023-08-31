@@ -80,15 +80,95 @@ RSpec.describe "Purchases", type: :request do
       end
     end
   
-    context 'when params are incorrect' do
+    context 'when params are empty' do
       it 'returns error status 422' do
         post '/purchase', params: {}
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include('error')
+        
+      end
+    end
+
+    context 'when movie doesnt exist' do
+      it 'returns error status not found' do
+        post '/purchase', params: {
+          "purchase": {
+            "purchasable_type": "Movie",
+            "purchasable_id": -1,
+            "user_id": user.id,
+            "purchase_option_id": 13
+          }
+        }
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to include('Movie not found')
+        
+      end
+    end
+
+    context 'when season doesnt exist' do
+      it 'returns error status not fount' do
+        post '/purchase', params: {
+          "purchase": {
+            "purchasable_type": "Season",
+            "purchasable_id": -1,
+            "user_id": user.id,
+            "purchase_option_id": 13
+          }
+        }
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to include('Season not found')
+        
+      end
+    end
+
+    context 'when purchase option doesnt exist' do
+      it 'returns error status not found' do
+        post '/purchase', params: {
+          "purchase": {
+            "purchasable_type": "Movie",
+            "purchasable_id": movie.id,
+            "user_id": user.id,
+            "purchase_option_id": -1
+          }
+        }
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to include('Purchase option not found')
+        post '/purchase', params: {
+          "purchase": {
+            "purchasable_type": "Season",
+            "purchasable_id": season.id,
+            "user_id": user.id,
+            "purchase_option_id": -1
+          }
+        }
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to include('Purchase option not found')
+        
       end
     end
   
+    context 'when user doesnt exist' do
+      it 'returns error status not fount' do
+        post '/purchase', params: {
+          "purchase": {
+            "purchasable_type": "Season",
+            "purchasable_id": season.id,
+            "user_id": -1,
+            "purchase_option_id": season.purchase_options.first.id
+          }
+        }
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.body).to include('Couldn\'t find User')
+        
+      end
+    end
+
     context 'when trying to purchase a movie twice' do
       it 'returns error Purchase option has already been taken status 422' do
         params_movie ={
@@ -108,7 +188,7 @@ RSpec.describe "Purchases", type: :request do
       end
     end
   
-    context 'when trying to purchase a movie twice two days later' do
+    context 'when trying to purchase a movie twice with 2 days in between' do
       it 'returns a purchased movie and status :created' do
         params_movie ={
           "purchase": {

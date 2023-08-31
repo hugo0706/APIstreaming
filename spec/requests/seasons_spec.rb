@@ -178,4 +178,33 @@ RSpec.describe "Seasons", type: :request do
       end
     end
   end
+
+  describe "DELETE /destroy" do
+    let(:season) { FactoryBot.create(:season,:with_episodes,:with_purchase_options,episodes_count: 3, purchase_options_count: 2) }
+    let(:purchase) { FactoryBot.create(:purchase, purchasable: season, purchase_option: season.purchase_options.first)}
+    context 'when season exists' do
+      
+      it 'deletes the season' do
+        delete '/seasons/'+season.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(Season.count).to eq(0)
+      end
+
+      it 'deletes the season purchases' do
+        purchase
+        expect(Purchase.count).to eq(1)
+        delete '/seasons/'+season.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(Purchase.count).to eq(0)
+      end
+
+      it 'deletes the season purchase_options' do
+        season
+        expect(PurchaseOption.count).to eq(2)
+        delete '/seasons/'+season.id.to_s 
+        expect(response).to have_http_status(:no_content)
+        expect(PurchaseOption.count).to eq(0)
+      end
+    end
+  end
 end
