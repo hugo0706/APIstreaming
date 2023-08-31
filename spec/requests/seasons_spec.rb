@@ -32,7 +32,7 @@ RSpec.describe "Seasons", type: :request do
     end
 
     context 'when seasons dont exist' do
-      it 'returns error "No seasons found" with status :ok' do
+      it 'returns empty array with status :ok' do
         allow(SeasonService).to receive(:get_seasons_desc_episodes_asc).and_return([])
 
         get '/seasons'

@@ -31,7 +31,7 @@ RSpec.describe "Movies", type: :request do
     end
 
     context 'when movies dont exist' do
-      it 'returns error "No movies found" with status :ok' do
+      it 'returns empty array with status :ok' do
         allow(MovieService).to receive(:get_movies_by_descending_creation).and_return([])
 
         get '/movies'
@@ -189,7 +189,7 @@ RSpec.describe "Movies", type: :request do
         }.to change(Movie, :count).by(0)
       end
 
-      it 'returns e' do
+      it 'returns json with error and status :unprocessable_entity' do
         post '/movies', params: params1
 
         expect(response).to have_http_status(:unprocessable_entity)

@@ -216,14 +216,14 @@ Coverage given by SimpleCov:
     when movies and seasons exist
       returns a list of movies and seasons with status :ok
     when movies and seasons dont exist
-      returns error "No catalog found" with status :ok
+      returns empty array with status :ok
 
 #### Movies
   GET /index
     when movies exist
       returns a list of movies with status :ok
     when movies dont exist
-      returns error "No movies found" with status :ok
+      returns empty array with status :ok
     when ActiveRecord::RecordNotFound is raised
       returns error message with status :not_found
     when StandardError is raised
@@ -238,7 +238,7 @@ Coverage given by SimpleCov:
       returns unprocessable_entity status and error message
     when other param is incorrect
       doesnt create a new Movie
-      returns e
+      returns json with error and status :unprocessable_entity
   DELETE /destroy
     when movie exists
       deletes the movie
@@ -273,7 +273,7 @@ Coverage given by SimpleCov:
     when seasons exist
       returns a list of seasons with status :ok
     when seasons dont exist
-      returns error "No seasons found" with status :ok
+      returns empty array with status :ok
     when ActiveRecord::RecordNotFound is raised
       returns error message with status :not_found
     when StandardError is raised

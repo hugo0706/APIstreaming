@@ -40,7 +40,7 @@ RSpec.describe "Catalog", type: :request do
     end
 
     context 'when movies and seasons dont exist' do
-      it 'returns error "No catalog found" with status :ok' do
+      it 'returns empty array with status :ok' do
         allow(CatalogService).to receive(:get_catalog_ordered).and_return([])
         
         get '/catalog'
