@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
   describe "GET /profile/library" do
     let(:expected_keys) do 
-        ['purchasable','purchase_option','expires_at']
+        ['purchasable','purchased_option','expires_at']
     end
     let(:user) { FactoryBot.create(:user,:with_movie_purchases,:with_season_purchases, movie_count:2, season_count:1) }
     context 'when user has purchases' do
