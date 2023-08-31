@@ -27,6 +27,8 @@
     - [GET /catalog](#get-catalog)
   - [Purchase](#purchase)
     - [POST /purchase](#post-purchase)
+  - [Library]
+    - [GET /profile/library](#get-profilelibrary)
 
 
 ## Introduction
@@ -662,4 +664,114 @@ Response: `201 created`
 }
 ```
 
+### GET /profile/library
 
+Description:
+Lists users purchased content by least time left to consume
+
+Request:
+```bash
+curl -X GET localhost:3000/profile/library?user_id={id}
+```
+
+Response:
+```json
+[
+    {
+        "purchasable": {
+            "id": 1,
+            "type": "movie",
+            "title": "Movie 1",
+            "plot": "Movie 1",
+            "created_at": "2023-08-31T14:04:57.052Z",
+            "updated_at": "2023-08-31T14:04:57.052Z",
+            "purchase_options": [
+                {
+                    "id": 1,
+                    "price": "9.99",
+                    "quality": "SD"
+                }
+            ]
+        },
+        "purchased_option": {
+            "id": 1,
+            "optionable_type": "Movie",
+            "optionable_id": 1,
+            "price": "9.99",
+            "quality": "SD",
+            "created_at": "2023-08-31T14:04:57.062Z",
+            "updated_at": "2023-08-31T14:04:57.062Z"
+        },
+        "expires_at": "2023-09-01T21:16:57.027Z"
+    },
+    {
+        "purchasable": {
+            "id": 2,
+            "type": "movie",
+            "title": "Movie 2",
+            "plot": "Movie 2",
+            "created_at": "2023-08-31T14:04:57.088Z",
+            "updated_at": "2023-08-31T14:04:57.088Z",
+            "purchase_options": [
+                {
+                    "id": 2,
+                    "price": "9.99",
+                    "quality": "SD"
+                }
+            ]
+        },
+        "purchased_option": {
+            "id": 2,
+            "optionable_type": "Movie",
+            "optionable_id": 2,
+            "price": "9.99",
+            "quality": "SD",
+            "created_at": "2023-08-31T14:04:57.091Z",
+            "updated_at": "2023-08-31T14:04:57.091Z"
+        },
+        "expires_at": "2023-09-01T21:16:57.027Z"
+    },
+    {
+        "purchasable": {
+            "id": 1,
+            "type": "season",
+            "title": "Season 1",
+            "number": 1,
+            "plot": "Season 1",
+            "created_at": "2023-08-31T14:04:57.104Z",
+            "updated_at": "2023-08-31T14:04:57.104Z",
+            "episodes": [
+                {
+                    "type": "episode",
+                    "id": 1,
+                    "title": "EP 1",
+                    "number": 1,
+                    "plot": "EP 1",
+                    "created_at": "2023-08-31T14:04:57.122Z"
+                }
+            ],
+            "purchase_options": [
+                {
+                    "id": 3,
+                    "optionable_type": "Season",
+                    "optionable_id": 1,
+                    "price": "9.99",
+                    "quality": "SD",
+                    "created_at": "2023-08-31T14:04:57.124Z",
+                    "updated_at": "2023-08-31T14:04:57.124Z"
+                }
+            ]
+        },
+        "purchased_option": {
+            "id": 3,
+            "optionable_type": "Season",
+            "optionable_id": 1,
+            "price": "9.99",
+            "quality": "SD",
+            "created_at": "2023-08-31T14:04:57.124Z",
+            "updated_at": "2023-08-31T14:04:57.124Z"
+        },
+        "expires_at": "2023-09-02T02:04:57.096Z"
+    }
+]
+```
