@@ -34,13 +34,14 @@
 This project simulates a RESTful API for a streaming service. The API handles various requests, including listing available movies, seasons, and the entire catalog offered by the service. It also manages user libraries and handles purchase requests.
 
   
-## Asumptions
+## Assumptions
 
 - 10 movie/seasons added every week
 - Users can buy the same content in different qualities
 - Cache has to be invalidated upon arrival of new content
 - User library needs 100% data accuracy
 - User authentication is not required, user_id can be used to identify
+- Episodes within a season should have unique numbers
 
 ---
 
