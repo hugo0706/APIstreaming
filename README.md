@@ -1,35 +1,48 @@
 # APIstreaming
+
+
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Assumptions](#assumptions)
-- [Versions](#versions)
-- [How to Deploy](#how-to-deploy)
+### 🌐   Core Sections
+- **[Introduction](#introduction)**
+- **[Assumptions](#assumptions)**
+- **[Versions](#versions)**
+- **[🚀 How to Deploy](#how-to-deploy)**
   - [Local Development](#local-development)
-- [Project Structure](#project-structure)
+
+### ⚙️  Project Configuration
+- **[Project Structure](#project-structure)**
   - [Schema](#schema)
   - [Relationships](#relationships)
   - [Polymorphism](#polymorphism)
   - [Folder Structure](#folder-structure)
-- [Caching Strategy](#caching-strategy)
-  - [Invalidation](#invalidation)
-- [Tests](#tests)
-- [Endpoints](#endpoints)
-  - [Movies](#movies)
-    - [GET /movies](#get-movies)
-    - [POST /movies](#post-movies)
-    - [DELETE /movies](#delete-movies)
-  - [Seasons](#seasons)
-    - [GET /seasons](#get-seasons)
-    - [POST /seasons](#post-seasons)
-    - [DELETE /seasons](#delete-seasons)
-  - [Catalog](#catalog)
-    - [GET /catalog](#get-catalog)
-  - [Purchase](#purchase)
-    - [POST /purchase](#post-purchase)
-  - [Library](#library)
-    - [GET /profile/library](#get-profilelibrary)
 
+### 🗄 Data Handling
+- **[Caching Strategy](#caching-strategy)**
+  - [Invalidation](#invalidation)
+
+### 🧪 Testing
+- **[Tests](#tests)**
+  - [Coverage](#coverage)
+  - [RSpec Tests](#rspec-tests)
+
+### 🛠 API Endpoints
+- **[Endpoints](#endpoints)**
+  - **Movies**
+    - [🔍 GET /movies](#get-movies)
+    - [➕ POST /movies](#post-movies)
+    - [❌ DELETE /movies](#delete-movies)
+  - **Seasons**
+    - [🔍 GET /seasons](#get-seasons)
+    - [➕ POST /seasons](#post-seasons)
+    - [❌ DELETE /seasons](#delete-seasons)
+  - **Catalog**
+    - [🔍 GET /catalog](#get-catalog)
+  - **Purchase**
+    - [➕ POST /purchase](#post-purchase)
+  - **Library**
+    - [🔍 GET /profile/library](#get-profilelibrary)
+---
 
 ## Introduction
 
@@ -204,8 +217,11 @@ To see coverage results after desploying tests use
 ```bash
 open coverage/index.html
 ```
+### Coverage
 Coverage given by SimpleCov:
-99.21% covered at 2.45 hits/line
+All Files ( 99.32% covered at 2.32 hits/line )
+50 files in total.
+876 relevant lines, 870 lines covered and 6 lines missed. ( 99.32% )
 
 ### Rspec tests
 
@@ -337,7 +353,52 @@ Coverage given by SimpleCov:
     when season is not found
       raises a RecordNotFound error
     when purchase option is not found
-      raises a RecordNotFound error
+      raises a RecordNotFound erro
+
+## Models
+### Episode
+  validations
+    is valid with correct params
+    is not valid without a title
+    is not valid without a plot
+    is not valid without a number
+    is not valid with a negative number, zero or float
+    is not valid with a repeated number within the same season
+
+### Movie
+  validations
+    is valid with correct params
+    is not valid without a title
+    is not valid without a plot
+
+### PurchaseOption
+  validations
+    is valid with correct params
+    is valid with price 0
+    is not valid without a price
+    is not valid with a negative price
+    is not valid without a quality
+    is not valid with a quality not in [HD, SD]
+
+### Purchase
+  validations
+    is valid with valid attributes
+    is not valid without an expires_at
+    is not valid without a unique purchase_option_id
+
+### Season
+  validations
+    is valid with correct params
+    is not valid without a title
+    is not valid without a plot
+    is not valid without a number
+    is not valid with a negative number, zero or float
+
+### User
+  validations
+    is valid with a unique email
+    is not valid without an email
+    is not valid with a repeated email
 
 ```
 
