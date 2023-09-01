@@ -23,7 +23,7 @@ class SeasonService
       raise ActiveRecord::RecordNotFound if purchase_option.nil?
       
       Purchase.transaction do
-        Purchase.create!(**params, purchasable_type: "Season", expires_at: Time.now + 2.days)
+        Purchase.create!(**params, purchasable_type: "Season")
       end
 
     rescue ActiveRecord::RecordNotFound => e

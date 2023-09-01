@@ -20,7 +20,7 @@ class MovieService
       purchase_option = movie.purchase_options.find_by(id: purchase_option)
       raise ActiveRecord::RecordNotFound if purchase_option.nil?
       Purchase.transaction do
-        Purchase.create!(**params, purchasable_type: "Movie", expires_at: Time.now + 2.days)
+        Purchase.create!(**params, purchasable_type: "Movie")
       end
 
     rescue ActiveRecord::RecordNotFound => e

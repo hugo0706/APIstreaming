@@ -10,10 +10,10 @@ RSpec.describe Purchase, type: :model do
       expect(purchase).to be_valid
     end
 
-    it "is not valid without an expires_at" do
+    it "is valid without an expires_at beacuse default is used" do
       purchase = Purchase.new(user: user, purchasable: movie, purchase_option: movie.purchase_options.first, expires_at: Time.now + 2.days)
       purchase.expires_at = nil
-      expect(purchase).to_not be_valid
+      expect(purchase).to be_valid
     end
 
     it "is not valid without a unique purchase_option_id" do

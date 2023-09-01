@@ -383,7 +383,7 @@ All Files ( 99.32% covered at 2.32 hits/line )
 ### Purchase
   validations
     is valid with valid attributes
-    is not valid without an expires_at
+    is valid without an expires_at beacuse default is used
     is not valid without a unique purchase_option_id
 
 ### Season
