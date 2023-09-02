@@ -3,11 +3,7 @@ class SeasonsController < ApplicationController
 
   def index
       seasons = SeasonService.get_seasons_desc_episodes_asc
-      if seasons.present?
-        render json: seasons, status: :ok
-      else
-        render json: [], status: :ok
-      end
+      render json: seasons, status: :ok
   end
 
   def create

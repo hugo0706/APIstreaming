@@ -3,12 +3,7 @@ class MoviesController < ApplicationController
 
   def index
     movies = MovieService.get_movies_by_descending_creation
-    if movies.present?
-      render json: movies, status: :ok
-    else
-      render json: [], status: :ok
-    end
-   
+    render json: movies, status: :ok
   end
 
   def create

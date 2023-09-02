@@ -10,7 +10,6 @@ class Purchase < ApplicationRecord
   private
 
   def set_default_expires_at
-    binding.irb
     self.expires_at ||= Time.now + 2.days
   end
   

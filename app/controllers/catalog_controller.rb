@@ -3,12 +3,7 @@ class CatalogController < ApplicationController
 
   def index
     catalog = CatalogService.get_catalog_ordered
-    if catalog.present?
-      render json: catalog, status: :ok
-    else
-      render json: [], status: :ok
-    end
-
+    render json: catalog, status: :ok
   end
 
 end
