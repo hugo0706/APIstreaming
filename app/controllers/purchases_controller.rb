@@ -4,7 +4,7 @@ class PurchasesController < ApplicationController
   before_action :validate_params, only: [:purchase]
 
   def purchase
-    valid_params = params[:purchase]
+    valid_params = validate_params
     purchase = Purchase.find_by(valid_params)
     if purchase.present?
       purchase_existing(purchase)
@@ -28,12 +28,10 @@ class PurchasesController < ApplicationController
 
   private
 
+ 
   def validate_params
-    params.require(:purchase)
-    %i[purchasable_type purchasable_id user_id purchase_option_id].each do |key|
-      raise ActionController::ParameterMissing.new(key) unless params[:purchase].key?(key)
-    end
-    params[:purchase] = params.require(:purchase).permit(:purchasable_type, :purchasable_id, :user_id, :purchase_option_id)
+    params.require(:purchase).require(%i[purchasable_type purchasable_id user_id purchase_option_id])
+    params.require(:purchase).permit(:purchasable_type, :purchasable_id, :user_id, :purchase_option_id)
   end
 
   def purchase_existing(purchase)
