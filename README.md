@@ -279,7 +279,7 @@ All Files ( 99.32% covered at 2.32 hits/line )
     when purchase option doesnt exist
       returns error status not found
     when user doesnt exist
-      returns error status not fount
+      returns error status unprocessable_entity
     when trying to purchase a movie twice
       returns error Purchase option has already been taken status 422
     when trying to purchase a movie twice with 2 days in between
@@ -335,9 +335,9 @@ All Files ( 99.32% covered at 2.32 hits/line )
     when successful
       creates a new purchase
     when movie is not found
-      raises a RecordNotFound error
+      doesnt persist the purchase
     when purchase option is not found
-      raises a RecordNotFound error
+      doesnt persist the purchase
 
 #### SeasonService
   .get_seasons_desc_episodes_asc
@@ -352,9 +352,9 @@ All Files ( 99.32% covered at 2.32 hits/line )
     when successful
       creates a new purchase
     when season is not found
-      raises a RecordNotFound error
+      doesnt persist the purchase
     when purchase option is not found
-      raises a RecordNotFound erro
+      doesnt persist the purchase
 
 ## Models
 ### Episode
