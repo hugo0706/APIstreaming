@@ -7,10 +7,14 @@ class Purchase < ApplicationRecord
   validates :expires_at, presence: true
   before_validation :set_default_expires_at, on: :create
 
+  def expired?
+    self.expires_at < Time.now
+  end
+
   private
 
   def set_default_expires_at
     self.expires_at ||= Time.now + 2.days
   end
-  
+ 
 end

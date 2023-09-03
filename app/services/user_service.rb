@@ -1,16 +1,8 @@
 class UserService
-
-  def self.update_library(user)
-    expired_purchases = user.purchases.where('expires_at < ?', Time.current)
-    expired_purchases.destroy_all
-  end
   
-  def self.get_library(user_id)
-    user = User.find(user_id)
-    return [] unless user
+  def self.get_library(user)
     
-    self.update_library(user)
-    purchases = user.purchases.includes(:purchasable, :purchase_option).order(expires_at: :asc)
+    purchases = user.purchases.includes(:purchasable, :purchase_option).where('expires_at > ?', Time.current).order(expires_at: :asc)
     
     library = purchases.map do |purchase|
       serializer = serializer_for(purchase.purchasable)

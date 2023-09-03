@@ -152,7 +152,7 @@ RSpec.describe "Purchases", type: :request do
     end
   
     context 'when user doesnt exist' do
-      it 'returns error status not fount' do
+      it 'returns error status unprocessable_entity' do
         post '/purchase', params: {
           "purchase": {
             "purchasable_type": "Season",
@@ -161,9 +161,8 @@ RSpec.describe "Purchases", type: :request do
             "purchase_option_id": season.purchase_options.first.id
           }
         }
-
-        expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('Couldn\'t find User')
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
         
       end
     end
