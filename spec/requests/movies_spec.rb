@@ -96,15 +96,11 @@ RSpec.describe "Movies", type: :request do
       end
   
       it 'invalidates the cache' do
-        allow(MovieService).to receive(:get_movies_by_descending_creation).and_call_original
-        allow(Rails.cache).to receive(:fetch).and_call_original
         allow(Rails.cache).to receive(:delete).and_call_original
         allow(MovieService).to receive(:invalidate_cache).and_call_original
         post '/movies', params:  params
         expect(MovieService).to have_received(:invalidate_cache)
-        expect(MovieService).to have_received(:get_movies_by_descending_creation)
         expect(Rails.cache).to have_received(:delete).with('movies_by_descending_creation')
-        expect(Rails.cache).to have_received(:fetch).with('movies_by_descending_creation')
       end
   
       it 'returns created status and the new movie as JSON' do

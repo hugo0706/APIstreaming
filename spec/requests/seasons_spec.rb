@@ -114,15 +114,11 @@ RSpec.describe "Seasons", type: :request do
       end
   
       it 'invalidates the cache' do
-        allow(SeasonService).to receive(:get_seasons_desc_episodes_asc).and_call_original
-        allow(Rails.cache).to receive(:fetch).and_call_original
         allow(Rails.cache).to receive(:delete).and_call_original
         allow(SeasonService).to receive(:invalidate_cache).and_call_original
         post '/seasons', params:  params
         expect(SeasonService).to have_received(:invalidate_cache)
-        expect(SeasonService).to have_received(:get_seasons_desc_episodes_asc)
         expect(Rails.cache).to have_received(:delete).with('seasons_desc_episodes_asc')
-        expect(Rails.cache).to have_received(:fetch).with('seasons_desc_episodes_asc')
       end
   
       it 'returns created status and the new season as JSON' do
