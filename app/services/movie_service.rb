@@ -13,6 +13,6 @@ class MovieService
   end
 
   def self.purchase_movie(params)
-    Purchase.create!(**params)
+    Purchase.create(**params)
   end
 end

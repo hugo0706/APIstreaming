@@ -42,20 +42,18 @@ RSpec.describe MovieService do
     end
 
     context 'when movie is not found' do
-      it 'raises a RecordNotFound error' do
+      it 'doesnt persist the purchase' do
         params[:purchasable_id] = -1
-        expect {
-          MovieService.purchase_movie(params)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+        MovieService.purchase_movie(params)
+        expect(Purchase.count).to eq(0)
       end
     end
 
     context 'when purchase option is not found' do
-      it 'raises a RecordInvalid error' do
+      it 'doesnt persist the purchase' do
         params[:purchase_option_id] = -1
-        expect {
-          MovieService.purchase_movie(params)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+        MovieService.purchase_movie(params)
+        expect(Purchase.count).to eq(0)
       end
     end
   end

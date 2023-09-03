@@ -51,20 +51,18 @@ RSpec.describe SeasonService do
     end
 
     context 'when season is not found' do
-      it 'raises a RecordNotFound error' do
+      it 'doesnt persist the purchase' do
         params[:purchasable_id] = -1
-        expect {
-          SeasonService.purchase_season(params)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+        SeasonService.purchase_season(params)
+        expect(Purchase.count).to eq(0)
       end
     end
 
     context 'when purchase option is not found' do
-      it 'raises a RecordNotFound error' do
+      it 'doesnt persist the purchase' do
         params[:purchase_option_id] = -1
-        expect {
-          SeasonService.purchase_season(params)
-        }.to raise_error(ActiveRecord::RecordInvalid)
+        SeasonService.purchase_season(params)
+        expect(Purchase.count).to eq(0)
       end
     end
   end

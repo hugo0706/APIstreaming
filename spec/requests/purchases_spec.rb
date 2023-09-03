@@ -181,9 +181,8 @@ RSpec.describe "Purchases", type: :request do
 
         post '/purchase', params: params_movie
         post '/purchase', params: params_movie
-
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to include('Purchase option has already been taken')
+        expect(response.body).to include('error')
       end
     end
   

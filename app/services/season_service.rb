@@ -15,7 +15,7 @@ class SeasonService
   end
 
   def self.purchase_season(params)
-    Purchase.create!(**params)
+    Purchase.create(**params)
   end
 
 end
