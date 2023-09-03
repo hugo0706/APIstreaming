@@ -1,8 +1,6 @@
 class PurchasesController < ApplicationController
   include ErrorHandler
 
-  before_action :validate_params, only: [:purchase]
-
   def purchase
     valid_params = validate_params
     purchase = Purchase.find_by(valid_params)
