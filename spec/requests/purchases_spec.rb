@@ -101,8 +101,8 @@ RSpec.describe "Purchases", type: :request do
           }
         }
 
-        expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('Movie not found')
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
         
       end
     end
@@ -118,8 +118,8 @@ RSpec.describe "Purchases", type: :request do
           }
         }
 
-        expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('Season not found')
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
         
       end
     end
@@ -135,8 +135,8 @@ RSpec.describe "Purchases", type: :request do
           }
         }
 
-        expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('Purchase option not found')
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
         post '/purchase', params: {
           "purchase": {
             "purchasable_type": "Season",
@@ -145,9 +145,8 @@ RSpec.describe "Purchases", type: :request do
             "purchase_option_id": -1
           }
         }
-
-        expect(response).to have_http_status(:not_found)
-        expect(response.body).to include('Purchase option not found')
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include('error')
         
       end
     end

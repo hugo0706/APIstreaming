@@ -6,7 +6,7 @@ class PurchasesController < ApplicationController
 
   def purchase
     valid_params = params[:purchase]
-    case valid_params.delete(:purchasable_type).capitalize
+    case valid_params[:purchasable_type].capitalize
     when "Movie"
       purchase = MovieService.purchase_movie valid_params
       render json: purchase, status: :created   

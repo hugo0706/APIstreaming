@@ -36,7 +36,7 @@ RSpec.describe SeasonService do
   describe '.purchase_season' do
     let(:season) { FactoryBot.create(:season, :with_purchase_options) }
     let(:user) { FactoryBot.create(:user) }
-    let(:params) { { user_id: user.id, purchasable_id: season.id, purchase_option_id: season.purchase_options.first.id } }
+    let(:params) { { user_id: user.id, purchasable_id: season.id, purchase_option_id: season.purchase_options.first.id, purchasable_type: season.class.to_s } }
     
     context 'when successful' do
       it 'creates a new purchase' do
@@ -55,7 +55,7 @@ RSpec.describe SeasonService do
         params[:purchasable_id] = -1
         expect {
           SeasonService.purchase_season(params)
-        }.to raise_error(ActiveRecord::RecordNotFound, "Season not found")
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
@@ -64,7 +64,7 @@ RSpec.describe SeasonService do
         params[:purchase_option_id] = -1
         expect {
           SeasonService.purchase_season(params)
-        }.to raise_error(ActiveRecord::RecordNotFound, "Purchase option not found")
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

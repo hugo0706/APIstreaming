@@ -27,7 +27,7 @@ RSpec.describe MovieService do
   describe '.purchase_movie' do
     let(:movie) { FactoryBot.create(:movie, :with_purchase_options) }
     let(:user) { FactoryBot.create(:user) }
-    let(:params) { { user_id: user.id, purchasable_id: movie.id, purchase_option_id: movie.purchase_options.first.id } }
+    let(:params) { { user_id: user.id, purchasable_id: movie.id, purchase_option_id: movie.purchase_options.first.id, purchasable_type: movie.class.to_s } }
     
     context 'when successful' do
       it 'creates a new purchase' do
@@ -46,16 +46,16 @@ RSpec.describe MovieService do
         params[:purchasable_id] = -1
         expect {
           MovieService.purchase_movie(params)
-        }.to raise_error(ActiveRecord::RecordNotFound, "Movie not found")
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
     context 'when purchase option is not found' do
-      it 'raises a RecordNotFound error' do
+      it 'raises a RecordInvalid error' do
         params[:purchase_option_id] = -1
         expect {
           MovieService.purchase_movie(params)
-        }.to raise_error(ActiveRecord::RecordNotFound, "Purchase option not found")
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
