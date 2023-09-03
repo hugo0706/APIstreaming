@@ -201,6 +201,7 @@ Given the moderate rate of content updates (approximately 10 additions per week)
 
 `/catalog` endpoint retrieves data from cached movies and seasons, forming the whole catalog.
 This way data is always up to date.
+
 **User Library**
 
 To ensure 100% data accuracy, the user library is not cached and is updated instantly upon request.
